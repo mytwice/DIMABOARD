@@ -87,7 +87,7 @@
 
         .dust-box {
             position: absolute;
-            width: 108px;
+            width: 178px;
             height: 99px;
             left: 24px;
             top: 233px;
@@ -100,12 +100,16 @@
 
         .weather-circle {
             position: absolute;
-            width: 99px;
+            width: 138px;
             height: 99px;
-            left: 256px;
-            top: 229px;
+            left: 224px;
+            top: 233px;
             background: #D9D9D9;
-            border-radius: 50%;
+            border-radius: 45px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 33px;
         }
 
         .dust-text {
@@ -281,7 +285,7 @@
             <div class="dust-box">
                 <div class="dust-text">미세<br>먼지</div>
             </div>
-            <div class="weather-circle"></div>
+            <div class="weather-circle">날씨</div>
             <div class="weekly-events">&lt;금주의 공연/전시&gt;</div>
 
             <div class="banner-left">
@@ -412,117 +416,190 @@
         }));
     }
 
-function initializeApp(shows) {
+    function initializeApp(shows) {
     const bannerLeft = document.querySelector('.banner-left');
     let currentIndex = 0;
 
-    // 배너 슬라이더 초기화 함수
     function initializeBanner() {
         // 이미지가 있는 공연만 필터링
         const showsWithImages = shows.filter(show => show.image);
         if (showsWithImages.length === 0) return;
 
-        // 초기 이미지 표시
-        updateBanner();
+        // 모든 배너 슬라이드 미리 생성
+        bannerLeft.innerHTML = showsWithImages.map((show, index) => `
+            <div class="banner-slide" style="opacity: ${index === 0 ? 1 : 0}; 
+                                          transition: opacity 0.5s;
+                                          position: absolute;
+                                          top: 0;
+                                          left: 0;
+                                          width: 100%;
+                                          height: 100%;">
+                <img src="https://mytwice.github.io/DIMAART/${show.image}" 
+                     alt="${show.name}" 
+                     style="width: 100%; 
+                            height: 100%; 
+                            object-fit: cover;">
+                <div class="banner-info">
+                    <h3>${show.name}</h3>
+                    <p>${show.date} ~ ${show.endDate}</p>
+                    <p>${show.venue}</p>
+                </div>
+            </div>
+        `).join('');
+
+        // 배너 컨테이너에 relative 포지션 설정
+        bannerLeft.style.position = 'relative';
 
         // 5초마다 다음 이미지로 전환
         setInterval(() => {
+            // 현재 배너 페이드 아웃
+            const currentSlide = bannerLeft.children[currentIndex];
+            if (currentSlide) currentSlide.style.opacity = '0';
+
+            // 다음 인덱스 계산
             currentIndex = (currentIndex + 1) % showsWithImages.length;
-            updateBanner();
+
+            // 다음 배너 페이드 인
+            const nextSlide = bannerLeft.children[currentIndex];
+            if (nextSlide) nextSlide.style.opacity = '1';
         }, 5000);
-
-        // 배너 업데이트 함수
-        function updateBanner() {
-            const show = showsWithImages[currentIndex];
-            
-            // 기존 내용을 지우고 새로운 배너 추가
-            bannerLeft.innerHTML = `
-                <div class="banner-slide" style="opacity: 0; transition: opacity 0.5s;">
-                    <img src="https://mytwice.github.io/DIMAART/${show.image}" alt="${show.name}" 
-                         style="width: 100%; height: 100%; object-fit: cover;">
-                    <div class="banner-info">
-                        <h3>${show.name}</h3>
-                        <p>${show.date} ~ ${show.endDate}</p>
-                        <p>${show.venue}</p>
-                    </div>
-                </div>
-            `;
-
-            // Fade in 효과
-            setTimeout(() => {
-                const slide = bannerLeft.querySelector('.banner-slide');
-                if (slide) slide.style.opacity = '1';
-            }, 50);
-        }
     }
 
     // 앱 초기화 시 배너 슬라이더 시작
     initializeBanner();
 }
 
+function updateDustColor(dustLevel) {
+    const dustText = document.querySelector('.dust-box');
+    if (!dustText) return;
 
-    // 셔틀시간 시작
-function updateBusTimes() {
-  const busTimesA1 = [
-    '08:20', '08:40', '08:50', '09:30', '09:40', '09:50', '10:30', '10:40',
-    '10:50', '11:30', '11:40', '11:50', '12:30', '12:40', '12:50', '13:40', '13:50', '14:40',
-    '14:50', '15:40', '15:50', '16:40', '16:50', '17:40', '17:50', '18:00'
-  ];
-  const busTimesA2 = [
-    '08:25', '08:45', '08:55', '09:35', '09:45', '09:55', '10:35',
-    '10:45', '10:55', '11:35', '11:45', '11:55', '12:35', '12:45', '12:55', '13:45', '13:55',
-    '14:45', '14:55', '15:45', '15:55', '16:45', '16:55', '17:45', '17:55'
-  ];
+    let backgroundColor, textColor;
 
-  // 현재 시간 구하기
-  const now = new Date();
-  const currentTime = now.getHours() * 60 + now.getMinutes(); // 현재 시간을 분 단위로 변환
-
-  // 시간을 비교할 함수
-  function getNextBusTimes(busTimes) {
-    const upcomingBuses = [];
-
-    for (let i = 0; i < busTimes.length; i++) {
-      const busTime = busTimes[i];
-      const [hour, minute] = busTime.split(':').map(Number);
-      const busTimeInMinutes = hour * 60 + minute;
-
-      // 버스가 현재 시간 이후인 경우
-      if (busTimeInMinutes > currentTime) {
-        upcomingBuses.push(busTimeInMinutes - currentTime);
-
-        // 3개 버스만 가져오기
-        if (upcomingBuses.length === 3) break;
-      }
+    // 미세먼지 농도에 따른 색상 설정
+    if (dustLevel <= 30) {
+        backgroundColor = '#32a1ff';  // 좋음 - 파랑
+        textColor = '#ffffff';
+    } else if (dustLevel <= 80) {
+        backgroundColor = '#00c73c';  // 보통 - 초록
+        textColor = '#ffffff';
+    } else if (dustLevel <= 150) {
+        backgroundColor = '#fda60e';  // 나쁨 - 주황
+        textColor = '#ffffff';
+    } else {
+        backgroundColor = '#ff5959';  // 매우나쁨 - 빨강
+        textColor = '#ffffff';
     }
 
-    return upcomingBuses;
-  }
-
-  // A1, A2 버스에서 다음 3개의 버스와 시간 차이 구하기
-  const nextBusesA1 = getNextBusTimes(busTimesA1);
-  const nextBusesA2 = getNextBusTimes(busTimesA2);
-
-  // 결과를 HTML에 반영
-  const routeA = document.querySelector('.route-a');
-  const routeB = document.querySelector('.route-b');
-
-  // A 노선 업데이트
-  if (routeA) {
-    routeA.innerHTML = `A노선 원룸촌 ㅣ ${nextBusesA1[0]}분 전 ㅣ ${nextBusesA1[1]}분 전 ㅣ ${nextBusesA1[2]}분 전`;
-  }
-
-  // B 노선 업데이트
-  if (routeB) {
-    routeB.innerHTML = `B노선 엔터관 ㅣ ${nextBusesA2[0]}분 전 ㅣ ${nextBusesA2[1]}분 전 ㅣ ${nextBusesA2[2]}분 전`;
-  }
+    // 배경색과 텍스트 색상 변경에 부드러운 전환 효과 적용
+    dustText.style.transition = 'background-color 0.3s ease, color 0.3s ease';
+    dustText.style.backgroundColor = backgroundColor;
 }
+updateDustColor(0);  // 좋음
 
-// 1분 간격으로 시간을 갱신 (1초마다 실행)
-setInterval(updateBusTimes, 1000);
+// updateDustColor(25);  // 좋음
+// updateDustColor(45);  // 보통
+// updateDustColor(95);  // 나쁨
+// updateDustColor(170); // 매우나쁨
 
-// 페이지 로드 시 바로 실행
+    // 셔틀시간 시작
+    function updateBusTimes(testTime = null) {
+    const busTimesA1 = [
+        '08:20', '08:40', '08:50', '09:30', '09:40', '09:50', 
+        '10:30', '10:40', '10:50', '11:30', '11:40', '11:50', 
+        '12:30', '12:40', '12:50', '13:40', '13:50', '14:40', 
+        '14:50', '15:40', '15:50', '16:40', '16:50', '17:40', 
+        '17:50', '18:00'
+    ];
+    
+    const busTimesA2 = [
+        '08:25', '08:45', '08:55', '09:35', '09:45', '09:55', 
+        '10:35', '10:45', '10:55', '11:35', '11:45', '11:55', 
+        '12:35', '12:45', '12:55', '13:45', '13:55', '14:45', 
+        '14:55', '15:45', '15:55', '16:45', '16:55', '17:45', 
+        '17:55'
+    ];
+
+    // 현재 시간 구하기 (테스트 시간이 있으면 사용)
+    let currentTime;
+    if (testTime) {
+        const [hours, minutes] = testTime.split(':').map(Number);
+        currentTime = hours * 60 + minutes;
+    } else {
+        const now = new Date();
+        currentTime = now.getHours() * 60 + now.getMinutes();
+    }
+
+    // 시간을 비교할 함수
+    function getNextBusTimes(busTimes) {
+        const upcomingBuses = [];
+        const firstBusTime = busTimes[0];
+        const [firstHour, firstMinute] = firstBusTime.split(':').map(Number);
+        const firstBusInMinutes = firstHour * 60 + firstMinute;
+
+        if (currentTime < firstBusInMinutes) {
+            // 현재 시간이 첫차 전이라면 첫차 시간만 반환
+            return [`첫차는 ${firstBusTime} 입니다`];
+        }
+
+        for (let i = 0; i < busTimes.length; i++) {
+            const busTime = busTimes[i];
+            const [hour, minute] = busTime.split(':').map(Number);
+            const busTimeInMinutes = hour * 60 + minute;
+
+            if (busTimeInMinutes > currentTime) {
+                upcomingBuses.push(busTimeInMinutes - currentTime);
+                if (upcomingBuses.length === 3) break;
+            }
+        }
+
+        if (upcomingBuses.length === 0) {
+            return [];
+        }
+
+        while (upcomingBuses.length < 3) {
+            upcomingBuses.push('');
+        }
+
+        return upcomingBuses;
+    }
+
+    function formatBusLine(routeName, times) {
+        if (times.length === 1 && typeof times[0] === 'string') {
+            // 첫차 전에는 첫차 시간만 표시
+            return `${routeName} ㅣ ${times[0]}`;
+        }
+
+        if (times.length === 0) {
+            return `${routeName} ㅣ 운행종료`;
+        }
+
+        const formattedTimes = times.map(time => {
+            if (time === '') return '     ';
+            return `${time}분 전`;
+        });
+        
+        return `${routeName} ㅣ ${formattedTimes[0]} ㅣ ${formattedTimes[1]} ㅣ ${formattedTimes[2]}`;
+    }
+
+    const nextBusesA1 = getNextBusTimes(busTimesA1);
+    const nextBusesA2 = getNextBusTimes(busTimesA2);
+
+    const routeA = document.querySelector('.route-a');
+    const routeB = document.querySelector('.route-b');
+
+    if (routeA) {
+        routeA.innerHTML = formatBusLine('A노선 원룸촌', nextBusesA1);
+    }
+
+    if (routeB) {
+        routeB.innerHTML = formatBusLine('B노선 엔터관', nextBusesA2);
+    }
+}
 updateBusTimes();
+
+// 테스트용 예시:
+// updateBusTimes('09:30');  // 오전 9시 30분으로 테스트
+// updateBusTimes();         // 실제 현재 시간으로 테스트
 
 // YouTube API 로드
 var tag = document.createElement('script');
