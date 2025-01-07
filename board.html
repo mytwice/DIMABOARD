@@ -298,9 +298,9 @@
                 <div class="route-info route-b"></div>
             </div>
             <div class="bottom-text shuttle-guide">셔<br>틀<br>안<br>내</div>
-            <img id="showImage" class="qr-box qr-left" src="/busqr.png" alt="공연 이미지">
+            <img id="showImage" class="qr-box qr-left" src="busqr.png" alt="공연 이미지">
             <div class="bottom-text performance-guide">공<br>연<br>안<br>내</div>
-            <img id="showImage" class="qr-box qr-right" src="/artqr.png" alt="공연 이미지">
+            <img id="showImage" class="qr-box qr-right" src="artqr.png" alt="공연 이미지">
             <div class="bottom-text qr-text-left"></div>
             <div class="bottom-text qr-text-right"></div>
         </div>
@@ -608,7 +608,7 @@ function onYouTubeIframeAPIReady() {
         videoId: videoIds[0],
         playerVars: {
             'autoplay': 1,
-            'controls': 1,
+            'controls': '0',
             'showinfo': 0,
             'rel': 0,
             'mute': 1
@@ -655,6 +655,37 @@ function onPlayerError(event) {
     }
 }
 
+        // 전체화면 상태를 확인하는 함수
+        function isFullScreen() {
+            return document.fullscreenElement || document.mozFullScreenElement || document.webkitFullscreenElement || document.msFullscreenElement;
+        }
+
+        // 화면 아무 곳이나 클릭하면 전체화면 토글
+        document.body.addEventListener("click", function() {
+            if (isFullScreen()) {
+                // 전체화면에서 나가기
+                if (document.exitFullscreen) {
+                    document.exitFullscreen();
+                } else if (document.mozCancelFullScreen) { // Firefox
+                    document.mozCancelFullScreen();
+                } else if (document.webkitExitFullscreen) { // Chrome, Safari, Opera
+                    document.webkitExitFullscreen();
+                } else if (document.msExitFullscreen) { // IE/Edge
+                    document.msExitFullscreen();
+                }
+            } else {
+                // 전체화면으로 전환
+                if (document.documentElement.requestFullscreen) {
+                    document.documentElement.requestFullscreen();
+                } else if (document.documentElement.mozRequestFullScreen) { // Firefox
+                    document.documentElement.mozRequestFullScreen();
+                } else if (document.documentElement.webkitRequestFullscreen) { // Chrome, Safari, Opera
+                    document.documentElement.webkitRequestFullscreen();
+                } else if (document.documentElement.msRequestFullscreen) { // IE/Edge
+                    document.documentElement.msRequestFullscreen();
+                }
+            }
+        });
 
 </script>
 
