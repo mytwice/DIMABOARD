@@ -17,6 +17,7 @@
             text-align: center;
             font-size: 80pt;
             line-height: 1.2;
+            cursor: none;
         }
     </style>
 </head>
@@ -24,6 +25,39 @@
     <div id="message">전광판<br>준비중</div>
 
     <script>
+        // 전체화면 상태를 확인하는 함수
+        function isFullScreen() {
+            return document.fullscreenElement || document.mozFullScreenElement || document.webkitFullscreenElement || document.msFullscreenElement;
+        }
+
+        // 화면 아무 곳이나 클릭하면 전체화면 토글
+        document.body.addEventListener("click", function() {
+            if (isFullScreen()) {
+                // 전체화면에서 나가기
+                if (document.exitFullscreen) {
+                    document.exitFullscreen();
+                } else if (document.mozCancelFullScreen) { // Firefox
+                    document.mozCancelFullScreen();
+                } else if (document.webkitExitFullscreen) { // Chrome, Safari, Opera
+                    document.webkitExitFullscreen();
+                } else if (document.msExitFullscreen) { // IE/Edge
+                    document.msExitFullscreen();
+                }
+            } else {
+                // 전체화면으로 전환
+                if (document.documentElement.requestFullscreen) {
+                    document.documentElement.requestFullscreen();
+                } else if (document.documentElement.mozRequestFullScreen) { // Firefox
+                    document.documentElement.mozRequestFullScreen();
+                } else if (document.documentElement.webkitRequestFullscreen) { // Chrome, Safari, Opera
+                    document.documentElement.webkitRequestFullscreen();
+                } else if (document.documentElement.msRequestFullscreen) { // IE/Edge
+                    document.documentElement.msRequestFullscreen();
+                }
+            }
+        });
+
+        
         // 리다이렉트 타이머 설정 (매시간 59초에 리다이렉트)
         function redirectAt59Seconds() {
             const currentDate = new Date();
