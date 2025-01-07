@@ -412,7 +412,6 @@
         }));
     }
 
-// 기존 코드는 그대로 유지하고, initializeApp 함수를 추가/수정합니다
 function initializeApp(shows) {
     const bannerLeft = document.querySelector('.banner-left');
     let currentIndex = 0;
@@ -519,8 +518,8 @@ function updateBusTimes() {
   }
 }
 
-// 1분 간격으로 시간을 갱신 (59초마다 실행)
-setInterval(updateBusTimes, 59000);
+// 1분 간격으로 시간을 갱신 (1초마다 실행)
+setInterval(updateBusTimes, 1000);
 
 // 페이지 로드 시 바로 실행
 updateBusTimes();
@@ -608,7 +607,7 @@ function onYouTubeIframeAPIReady() {
         videoId: videoIds[0],
         playerVars: {
             'autoplay': 1,
-            'controls': '0',
+            'controls': 1,
             'showinfo': 0,
             'rel': 0,
             'mute': 1
