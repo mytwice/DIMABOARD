@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>준비중</title>
+    <style>
+        body {
+            background-color: black;
+            color: white;
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            text-align: center;
+            font-size: 80pt;
+            line-height: 1.2;
+        }
+    </style>
+</head>
+<body>
+    <div id="message">전광판<br>준비중</div>
+
+    <script>
+        // 리다이렉트 타이머 설정 (매시간 59초에 리다이렉트)
+        function redirectAt59Seconds() {
+            const currentDate = new Date();
+            const secondsToNext59 = 59 - currentDate.getSeconds();
+            setTimeout(() => {
+                window.location.href = "https://mytwice.github.io/DIMABOARD/board";
+            }, secondsToNext59 * 1000);
+        }
+
+        // 매시간 59초에 리다이렉트가 시작되도록 설정
+        redirectAt59Seconds();
+    </script>
+</body>
+</html>
