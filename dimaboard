@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DIMA BOARD</title>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', sans-serif;
+            overflow: hidden;
+            cursor: none;
+        }
+
+        .container {
+            position: relative;
+            width: 1920px;
+            height: 1080px;
+            background: #FFFFFF;
+        }
+
+        /* Left Panel */
+        .main-display {
+            position: absolute;
+            width: 1531px;
+            height: 861px;
+            left: 0;
+            top: 0;
+            background: #D9D9D9;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .main-text {
+            font-size: 128px;
+            color: #000000;
+        }
+
+        /* Right Panel */
+        .side-panel {
+            position: absolute;
+            width: 389px;
+            height: 861px;
+            left: 1531px;
+            top: 0;
+            background: #7579FE;
+            overflow: hidden;
+        }
+
+        .date {
+            position: absolute;
+            width: 355px;
+            height: 48px;
+            left: 17px;
+            top: 23px;
+            font-size: 36px;
+            line-height: 48px;
+            text-align: center;
+            color: #000000;
+        }
+
+        .time-box {
+            box-sizing: border-box;
+            position: absolute;
+            width: 348px;
+            height: 131px;
+            left: 21px;
+            top: 86px;
+            background: #FFFFFF;
+            border: 1px solid #000000;
+            box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+            border-radius: 64px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .clock {
+            height: 151px;
+            font-size: 96px;
+            color: #000000;
+            text-align: center;
+        }
+
+        .dust-box {
+            position: absolute;
+            width: 108px;
+            height: 99px;
+            left: 24px;
+            top: 233px;
+            background: #D9D9D9;
+            border-radius: 45px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .weather-circle {
+            position: absolute;
+            width: 99px;
+            height: 99px;
+            left: 256px;
+            top: 229px;
+            background: #D9D9D9;
+            border-radius: 50%;
+        }
+
+        .dust-text {
+            font-size: 33px;
+            line-height: 40px;
+            text-align: center;
+            color: #000000;
+        }
+
+        .weekly-events {
+            position: absolute;
+            width: 394px;
+            height: 48px;
+            left: -2px;
+            top: 339px;
+            font-size: 40px;
+            line-height: 48px;
+            text-align: center;
+            color: #000000;
+        }
+
+        .banner-left {
+            position: absolute;
+            width: 342px;
+            height: 429px;
+            left: 24px;
+            top: 406px;
+            background: #FFFFFF;
+        }
+
+        .banner-slide {
+            position: relative;
+            width: 100%;
+            height: 100%;
+        }
+
+        .banner-info {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+        }
+
+        .banner-info h3 {
+            margin: 0 0 10px 0;
+            font-size: 1.5em;
+        }
+
+        .banner-info p {
+            margin: 5px 0;
+        }
+
+        /* Bottom Panel */
+        .bottom-bar {
+            position: absolute;
+            width: 1920px;
+            height: 219px;
+            left: 0;
+            top: 861px;
+            background: #141426;
+            overflow: hidden;
+        }
+
+        .shuttle-info {
+            box-sizing: border-box;
+            position: absolute;
+            width: 1128px;
+            height: 177px;
+            left: 231px;
+            top: 21px;
+            background: #FFFFFF;
+            border: 1px solid #000000;
+            box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+            border-radius: 75px;
+            padding: 20px;
+        }
+
+        .route-info {
+            position: absolute;
+            text-align: left; /* 글자 좌측 정렬 */
+            width: 1012px;
+            font-size: 50px;
+            line-height: 67px;
+            color: #000000;
+            left: 55px;
+        }
+
+        .route-a {
+            top: 19px;
+        }
+
+        .route-b {
+            top: 90px;
+        }
+
+        .qr-box {
+            position: absolute;
+            width: 182px;
+            height: 185px;
+            background: #FFFFFF;
+            top: 16px;
+        }
+
+        .qr-left {
+            left: 1447px;
+        }
+
+        .qr-right {
+            left: 1717px;
+        }
+
+        .bottom-text {
+            position: absolute;
+            width: 163px;
+            height: 78px;
+            font-size: 40px;
+            line-height: 48px;
+            text-align: center;
+            top: 12px;
+        }
+
+        .shuttle-guide {
+            left: 1328px;
+            color: #FFFFFF;
+        }
+
+        .performance-guide {
+            left: 1594px;
+            color: #FFFFFF;
+        }
+
+        .qr-text-left {
+            left: 1464px;
+            top: 68px;
+            color: #000000;
+        }
+
+        .qr-text-right {
+            left: 1734px;
+            top: 68px;
+            color: #000000;
+        }
+
+        .bus-icon {
+            position: absolute;
+            left: 28px;
+            top: 20px;
+            width: 180px;
+            height: 180px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .bus-icon img {
+            width: 80%;
+            height: 80%;
+        }
+        
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="main-display" id="player"></div>
+        <div class="side-panel">
+            <div class="date">2024년 00월 00일</div>
+            <div class="time-box">
+                <div class="clock">00:00</div>
+            </div>
+            <div class="dust-box">
+                <div class="dust-text">미세<br>먼지</div>
+            </div>
+            <div class="weather-circle"></div>
+            <div class="weekly-events">&lt;금주의 공연/전시&gt;</div>
+
+            <div class="banner-left">
+                </div>
+            </div>
+        </div>
+
+        <div class="bottom-bar">
+            <div class="bus-icon">
+                <img src="https://mytwice.github.io/DIMABUS/bus-99056_1280.png" alt="Bus Icon">
+            </div>
+            <div class="shuttle-info">
+                <div class="route-info route-a"></div>
+                <div class="route-info route-b"></div>
+            </div>
+            <div class="bottom-text shuttle-guide">셔<br>틀<br>안<br>내</div>
+            <img id="showImage" class="qr-box qr-left" src="/busqr.png" alt="공연 이미지">
+            <div class="bottom-text performance-guide">공<br>연<br>안<br>내</div>
+            <img id="showImage" class="qr-box qr-right" src="/artqr.png" alt="공연 이미지">
+            <div class="bottom-text qr-text-left"></div>
+            <div class="bottom-text qr-text-right"></div>
+        </div>
+    </div>
+</body>
+
+<script>
+    // HTML 요소 가져오기
+    const dateElement = document.querySelector('.date');
+    const clockElement = document.querySelector('.clock');
+
+    // 날짜 업데이트 함수
+    function updateDate() {
+        const now = new Date();
+        const year = now.getFullYear();
+        const month = String(now.getMonth() + 1).padStart(2, '0');
+        const day = String(now.getDate()).padStart(2, '0');
+        
+        // 한국어로 요일 표시
+        const weekdays = ['일', '월', '화', '수', '목', '금', '토'];
+        const weekday = weekdays[now.getDay()];
+        
+        // YYYY년 MM월 DD일 (요일) 형식으로 표시
+        dateElement.textContent = `${year}년 ${month}월 ${day}일 (${weekday})`;
+    }
+
+    // 시계 업데이트 함수
+    function updateClock() {
+        const now = new Date();
+        const hours = String(now.getHours()).padStart(2, '0');
+        const minutes = String(now.getMinutes()).padStart(2, '0');
+        
+        // HH:MM 형식으로 표시
+        clockElement.textContent = `${hours}:${minutes}`;
+    }
+
+    // 초기 실행
+    updateDate();
+    updateClock();
+
+    // 1초마다 시계 업데이트
+    setInterval(updateClock, 1000);
+
+    // 자정마다 날짜 업데이트
+    setInterval(updateDate, 24 * 60 * 60 * 1000);
+
+    // 페이지 로드 시와 포커스 시 시간 동기화
+    window.addEventListener('load', () => {
+        updateDate();
+        updateClock();
+    });
+
+    window.addEventListener('focus', () => {
+        updateDate();
+        updateClock();
+    });
+
+       // 구글 차트 라이브러리 로드 후 실행
+       google.charts.load("current", { packages: ["corechart"] }).then(() => {
+        const myKey = "1HARkehL11DD1-92_XO6ypNRKqkpayO-Rf4kKuViCLbU"
+        let query = new google.visualization.Query(
+            `http://spreadsheets.google.com/tq?key=${myKey}&pub=1`
+        );
+
+        query.send((response) => {
+            if (response.isError()) {
+                console.error("Error in query: " + response.getMessage());
+                return;
+            }
+
+            let dataTable = response.getDataTable().toJSON();
+            let jsonData = JSON.parse(dataTable);
+            let cols = jsonData.cols.map((col) => col.label);
+            let shows = processShowData(jsonData, cols);
+            
+            // 초기 데이터 로드 및 이벤트 리스너 설정
+            initializeApp(shows);
+        });
+    });
+
+    // 스프레드시트 데이터 처리 함수
+    function processShowData(jsonData, cols) {
+        let rows = jsonData.rows.map((row) => {
+            let newRow = {};
+            row.c.forEach((obj, index) => {
+                if (obj == null) return;
+                const colName = cols[index];
+                newRow[colName] = "f" in obj ? obj["f"] : obj["v"];
+            });
+            return newRow;
+        });
+
+        return rows.filter(row => row['표시 ON/OFF'] === 'TRUE').map(row => ({
+            name: row['공연명'],
+            date: row['일시'].split('~')[0].trim(),
+            endDate: row['일시'].split('~')[1]?.trim() || row['일시'].split('~')[0].trim(),
+            venue: row['장소'] || '',
+            type: row['종류'] || '',
+            cast: row['출연'] || '',
+            duration: row['관람시간'] || '',
+            description: row['설명'] || '',
+            videolink: row['영상 링크'] || '',
+            image: row['메인포스터'] || '',
+            organizer: row['주최/주관'] || '',
+            withorganizer: row['협업기관'] || '',
+            mainNotice: row['메인공지 ON/OFF'] === 'TRUE',
+            gallery: [row['사진1'], row['사진2'], row['사진3'], row['사진4']]
+                .filter(img => img && img !== '')
+        }));
+    }
+
+// 기존 코드는 그대로 유지하고, initializeApp 함수를 추가/수정합니다
+function initializeApp(shows) {
+    const bannerLeft = document.querySelector('.banner-left');
+    let currentIndex = 0;
+
+    // 배너 슬라이더 초기화 함수
+    function initializeBanner() {
+        // 이미지가 있는 공연만 필터링
+        const showsWithImages = shows.filter(show => show.image);
+        if (showsWithImages.length === 0) return;
+
+        // 초기 이미지 표시
+        updateBanner();
+
+        // 5초마다 다음 이미지로 전환
+        setInterval(() => {
+            currentIndex = (currentIndex + 1) % showsWithImages.length;
+            updateBanner();
+        }, 5000);
+
+        // 배너 업데이트 함수
+        function updateBanner() {
+            const show = showsWithImages[currentIndex];
+            
+            // 기존 내용을 지우고 새로운 배너 추가
+            bannerLeft.innerHTML = `
+                <div class="banner-slide" style="opacity: 0; transition: opacity 0.5s;">
+                    <img src="https://mytwice.github.io/DIMAART/${show.image}" alt="${show.name}" 
+                         style="width: 100%; height: 100%; object-fit: cover;">
+                    <div class="banner-info">
+                        <h3>${show.name}</h3>
+                        <p>${show.date} ~ ${show.endDate}</p>
+                        <p>${show.venue}</p>
+                    </div>
+                </div>
+            `;
+
+            // Fade in 효과
+            setTimeout(() => {
+                const slide = bannerLeft.querySelector('.banner-slide');
+                if (slide) slide.style.opacity = '1';
+            }, 50);
+        }
+    }
+
+    // 앱 초기화 시 배너 슬라이더 시작
+    initializeBanner();
+}
+
+
+    // 셔틀시간 시작
+function updateBusTimes() {
+  const busTimesA1 = [
+    '08:20', '08:40', '08:50', '09:30', '09:40', '09:50', '10:30', '10:40',
+    '10:50', '11:30', '11:40', '11:50', '12:30', '12:40', '12:50', '13:40', '13:50', '14:40',
+    '14:50', '15:40', '15:50', '16:40', '16:50', '17:40', '17:50', '18:00'
+  ];
+  const busTimesA2 = [
+    '08:25', '08:45', '08:55', '09:35', '09:45', '09:55', '10:35',
+    '10:45', '10:55', '11:35', '11:45', '11:55', '12:35', '12:45', '12:55', '13:45', '13:55',
+    '14:45', '14:55', '15:45', '15:55', '16:45', '16:55', '17:45', '17:55'
+  ];
+
+  // 현재 시간 구하기
+  const now = new Date();
+  const currentTime = now.getHours() * 60 + now.getMinutes(); // 현재 시간을 분 단위로 변환
+
+  // 시간을 비교할 함수
+  function getNextBusTimes(busTimes) {
+    const upcomingBuses = [];
+
+    for (let i = 0; i < busTimes.length; i++) {
+      const busTime = busTimes[i];
+      const [hour, minute] = busTime.split(':').map(Number);
+      const busTimeInMinutes = hour * 60 + minute;
+
+      // 버스가 현재 시간 이후인 경우
+      if (busTimeInMinutes > currentTime) {
+        upcomingBuses.push(busTimeInMinutes - currentTime);
+
+        // 3개 버스만 가져오기
+        if (upcomingBuses.length === 3) break;
+      }
+    }
+
+    return upcomingBuses;
+  }
+
+  // A1, A2 버스에서 다음 3개의 버스와 시간 차이 구하기
+  const nextBusesA1 = getNextBusTimes(busTimesA1);
+  const nextBusesA2 = getNextBusTimes(busTimesA2);
+
+  // 결과를 HTML에 반영
+  const routeA = document.querySelector('.route-a');
+  const routeB = document.querySelector('.route-b');
+
+  // A 노선 업데이트
+  if (routeA) {
+    routeA.innerHTML = `A노선 원룸촌 ㅣ ${nextBusesA1[0]}분 전 ㅣ ${nextBusesA1[1]}분 전 ㅣ ${nextBusesA1[2]}분 전`;
+  }
+
+  // B 노선 업데이트
+  if (routeB) {
+    routeB.innerHTML = `B노선 엔터관 ㅣ ${nextBusesA2[0]}분 전 ㅣ ${nextBusesA2[1]}분 전 ㅣ ${nextBusesA2[2]}분 전`;
+  }
+}
+
+// 1분 간격으로 시간을 갱신 (59초마다 실행)
+setInterval(updateBusTimes, 59000);
+
+// 페이지 로드 시 바로 실행
+updateBusTimes();
+
+// YouTube API 로드
+var tag = document.createElement('script');
+tag.src = "https://www.youtube.com/iframe_api";
+var firstScriptTag = document.getElementsByTagName('script')[0];
+firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+let player;
+let currentVideoIndex = 0;
+let videoIds = [];
+let errorRetries = 0;
+const MAX_RETRIES = 3;
+
+// 구글 스프레드시트에서 데이터를 가져오는 부분
+google.charts.load("current", { packages: ["corechart"] }).then(() => {
+    const myKey = "1HARkehL11DD1-92_XO6ypNRKqkpayO-Rf4kKuViCLbU" // 여기에 스프레드시트 키 입력
+    let query = new google.visualization.Query(
+        `http://spreadsheets.google.com/tq?key=${myKey}&pub=1`
+    );
+
+    query.send((response) => {
+        if (response.isError()) {
+            console.error("Error in query: " + response.getMessage());
+            return;
+        }
+
+        let dataTable = response.getDataTable().toJSON();
+        let jsonData = JSON.parse(dataTable);
+        let cols = jsonData.cols.map((col) => col.label);
+        
+        videoIds = processVideoLinks(jsonData, cols);
+        
+        // YouTube 플레이어 초기화
+        onYouTubeIframeAPIReady();
+    });
+});
+
+// 영상 링크 처리 함수
+function processVideoLinks(jsonData, cols) {
+    let rows = jsonData.rows.map((row) => {
+        let newRow = {};
+        row.c.forEach((obj, index) => {
+            if (obj == null) return;
+            const colName = cols[index];
+            newRow[colName] = "f" in obj ? obj["f"] : obj["v"];
+        });
+        return newRow;
+    });
+
+    return rows
+        .filter(row => row['전광판 ON/OFF'] === 'TRUE' && row['영상 링크'])
+        .map(row => {
+            const url = row['영상 링크'];
+            let videoId = '';
+            
+            if (url.includes('watch?v=')) {
+                videoId = url.split('watch?v=')[1].split('&')[0];
+            }
+            else if (url.includes('youtu.be/')) {
+                videoId = url.split('youtu.be/')[1].split('?')[0];
+            }
+            
+            return videoId;
+        })
+        .filter(id => id);
+}
+
+// 다음 영상으로 이동하는 함수
+function playNextVideo() {
+    currentVideoIndex = (currentVideoIndex + 1) % videoIds.length;
+    errorRetries = 0; // 새 영상 시작시 재시도 횟수 초기화
+    player.loadVideoById(videoIds[currentVideoIndex]);
+}
+
+// YouTube 플레이어 초기화
+function onYouTubeIframeAPIReady() {
+    if (videoIds.length === 0) return;
+    
+    player = new YT.Player('player', {
+        width: '1531',
+        height: '861',
+        videoId: videoIds[0],
+        playerVars: {
+            'autoplay': 1,
+            'controls': 1,
+            'showinfo': 0,
+            'rel': 0,
+            'mute': 1
+        },
+        events: {
+            'onStateChange': onPlayerStateChange,
+            'onError': onPlayerError
+        }
+    });
+}
+
+// 플레이어 상태 변경 이벤트 핸들러
+function onPlayerStateChange(event) {
+    // 영상이 끝났을 때
+    if (event.data === YT.PlayerState.ENDED) {
+        playNextVideo();
+    }
+}
+
+// 플레이어 에러 핸들러
+function onPlayerError(event) {
+    console.log('YouTube player error:', event.data);
+    
+    // 에러 코드에 따른 처리
+    switch(event.data) {
+        case 2:  // 잘못된 매개변수
+        case 5:  // HTML5 플레이어 관련 오류
+        case 100:  // "이 동영상을 재생할 수 없음"
+        case 101: // "이 동영상은 내장 플레이어에서 재생할 수 없습니다"
+        case 150: // 위와 동일
+            if (errorRetries < MAX_RETRIES) {
+                errorRetries++;
+                console.log(`Retrying video ${currentVideoIndex}, attempt ${errorRetries}`);
+                setTimeout(() => player.loadVideoById(videoIds[currentVideoIndex]), 1000);
+            } else {
+                console.log(`Skipping problematic video ${currentVideoIndex}`);
+                playNextVideo();
+            }
+            break;
+        default:
+            // 기타 에러의 경우 다음 영상으로 넘어감
+            playNextVideo();
+            break;
+    }
+}
+
+
+</script>
+
+</html>
