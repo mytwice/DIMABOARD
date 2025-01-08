@@ -56,7 +56,8 @@
             height: 48px;
             left: 17px;
             top: 23px;
-            font-size: 36px;
+            font-size: 35px;
+            font-weight: bold;
             line-height: 48px;
             text-align: center;
             color: #000000;
@@ -124,8 +125,9 @@
             width: 394px;
             height: 48px;
             left: -2px;
-            top: 339px;
-            font-size: 40px;
+            top: 343px;
+            font-size: 34px;
+            font-weight: bold;
             line-height: 48px;
             text-align: center;
             color: #000000;
@@ -152,17 +154,18 @@
             left: 0;
             right: 0;
             padding: 20px;
-            background: rgba(0, 0, 0, 0.7);
+            background: rgba(52, 18, 47, 0.7);
             color: white;
         }
 
         .banner-info h3 {
             margin: 0 0 10px 0;
-            font-size: 1.5em;
+            font-size: 1.7em;
         }
 
         .banner-info p {
             margin: 5px 0;
+            font-size: 20px;
         }
 
         /* Bottom Panel */
@@ -397,23 +400,33 @@
             return newRow;
         });
 
-        return rows.filter(row => row['표시 ON/OFF'] === 'TRUE').map(row => ({
-            name: row['공연명'],
-            date: row['일시'].split('~')[0].trim(),
-            endDate: row['일시'].split('~')[1]?.trim() || row['일시'].split('~')[0].trim(),
-            venue: row['장소'] || '',
-            type: row['종류'] || '',
-            cast: row['출연'] || '',
-            duration: row['관람시간'] || '',
-            description: row['설명'] || '',
-            videolink: row['영상 링크'] || '',
-            image: row['메인포스터'] || '',
-            organizer: row['주최/주관'] || '',
-            withorganizer: row['협업기관'] || '',
-            mainNotice: row['메인공지 ON/OFF'] === 'TRUE',
-            gallery: [row['사진1'], row['사진2'], row['사진3'], row['사진4']]
-                .filter(img => img && img !== '')
-        }));
+        return rows.filter(row => row['표시 ON/OFF'] === 'TRUE').map(row => {
+            const dateArray = row['일시'].split('~').map(d => d.trim());
+            const startDate = dateArray[0];
+            const endDate = dateArray[1] || dateArray[0];
+            
+            // 날짜 표시 로직
+            const displayDate = startDate === endDate ? startDate : `${startDate} ~ ${endDate}`;
+
+            return {
+                name: row['공연명'],
+                date: startDate,
+                endDate: endDate,
+                displayDate: displayDate,  // 새로운 필드 추가
+                venue: row['장소'] || '',
+                type: row['종류'] || '',
+                cast: row['출연'] || '',
+                duration: row['관람시간'] || '',
+                description: row['설명'] || '',
+                videolink: row['영상 링크'] || '',
+                image: row['메인포스터'] || '',
+                organizer: row['주최/주관'] || '',
+                withorganizer: row['협업기관'] || '',
+                mainNotice: row['메인공지 ON/OFF'] === 'TRUE',
+                gallery: [row['사진1'], row['사진2'], row['사진3'], row['사진4']]
+                    .filter(img => img && img !== '')
+            };
+        });
     }
 
     function initializeApp(shows) {
@@ -441,7 +454,7 @@
                             object-fit: cover;">
                 <div class="banner-info">
                     <h3>${show.name}</h3>
-                    <p>${show.date} ~ ${show.endDate}</p>
+                    <p>${show.displayDate}</p>
                     <p>${show.venue}</p>
                 </div>
             </div>
